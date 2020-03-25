@@ -126,7 +126,7 @@ hook OnGameModeInit()
         for(new TDN = 0; TDN < MAX_TDN; TDN++)
         {
             TextDrawsNotification[playerid][TDN][TextDraw] = TextDrawCreate(TDN_POS_X, TDN_POS_Y, "TDNotifications");
-            TextDrawFont(TextDrawsNotification[playerid][TDN][TextDraw], 1);
+            TextDrawFont(TextDrawsNotification[playerid][TDN][TextDraw], TDN_FONT);
             TextDrawLetterSize(TextDrawsNotification[playerid][TDN][TextDraw], TDN_LETTER_SIZE_X, TDN_LETTER_SIZE_Y);
             TextDrawTextSize(TextDrawsNotification[playerid][TDN][TextDraw], floatadd(TDN_POS_X, TDN_SIZE), 1.000000);
             TextDrawSetOutline(TextDrawsNotification[playerid][TDN][TextDraw], 1);
@@ -136,7 +136,7 @@ hook OnGameModeInit()
             TextDrawBackgroundColor(TextDrawsNotification[playerid][TDN][TextDraw], TDN_COLOR_BOX);
             TextDrawBoxColor(TextDrawsNotification[playerid][TDN][TextDraw], TDN_COLOR_BOX);
             TextDrawUseBox(TextDrawsNotification[playerid][TDN][TextDraw], 1);
-            TextDrawSetProportional(TextDrawsNotification[playerid][TDN][TextDraw], 1);
+            TextDrawSetProportional(TextDrawsNotification[playerid][TDN][TextDraw], TDN_PROPORTIONAL);
             TextDrawSetSelectable(TextDrawsNotification[playerid][TDN][TextDraw], 0);
         }
     }
@@ -163,7 +163,7 @@ public ShowTDNotification(playerid, const reason[])
             TextDrawSetString(TextDrawsNotification[playerid][TDN][TextDraw], reason);
             TextDrawsNotification[playerid][TDN][Use] = 1;
             MinPosYTDNotification(playerid, TDN);
-            TDNotificationMaxPosY(playerid, TDN);
+            MaxPosYTDNotification(playerid, TDN);
             TextDrawSetPos(TextDrawsNotification[playerid][TDN][TextDraw], TDN_POS_X, TextDrawsNotification[playerid][TDN][MinPosY]);
             TextDrawShowForPlayer(playerid, TextDrawsNotification[playerid][TDN][TextDraw]);
             defer TimerHideTDNotification(playerid, TDN);
@@ -203,13 +203,13 @@ stock UpdateTDNotifications(playerid, TDN)
                 TextDrawsNotification[playerid][TDN][MinPosY] = 0;
                 TextDrawsNotification[playerid][TDN][MaxPosY] = 0;
                 TextDrawsNotification[playerid][after][MinPosY] = TextDrawsNotification[playerid][TDN][MinPosY];
-                TDNotificationMaxPosY(playerid, after);
+                MaxPosYTDNotification(playerid, after);
                 TextDrawSetPos(TextDrawsNotification[playerid][after][TextDraw], TDN_POS_X, TextDrawsNotification[playerid][after][MinPosY]);
             }
             else
             {
                 TextDrawsNotification[playerid][after][MinPosY] = TDN_DISTANCE + TextDrawsNotification[playerid][before][MaxPosY];
-                TDNotificationMaxPosY(playerid, after);
+                MaxPosYTDNotification(playerid, after);
                 TextDrawSetPos(TextDrawsNotification[playerid][after][TextDraw], TDN_POS_X, TextDrawsNotification[playerid][after][MinPosY]);
             }
             before = after;
@@ -264,12 +264,12 @@ stock MinPosYTDNotification(playerid, TDN)
     return 1;
 }
 
-stock TDNotificationMaxPosY(playerid, TDN)
+stock MaxPosYTDNotification(playerid, TDN)
 {
     new Float:up = (TDN_LETTER_SIZE_Y * 2) + 2;
     new Float:letter = (TDN_LETTER_SIZE_Y * 6) * TextDrawsNotification[playerid][TDN][Line];
     new Float:middle = (TextDrawsNotification[playerid][TDN][Line] - 1) * ((TDN_LETTER_SIZE_Y * 2) + 2 + TDN_LETTER_SIZE_Y + 2);
     new Float:down = TDN_LETTER_SIZE_Y + 2;
-    TextDrawsNotification[playerid][TDN][MaxPosY] = up + letter + middle + down;
+    TextDrawsNotification[playerid][TDN][MaxPosY] = TextDrawsNotification[playerid][TDN][MinPosY] + up + letter + middle + down;
     return 1;
 }
