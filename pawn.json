@@ -6,10 +6,10 @@
 	"dependencies": [
 		"sampctl/samp-stdlib",
 		"pawn-lang/YSI-Includes@5.x",
-		"kristoisberg/samp-td-string-width",
-		"kristoisberg/samp-td-streamer",
-		"IllidanS4/PawnPlus",
-		"pawn-lang/YSI-includes@5.x"
+		"kristoisberg/samp-td-string-width"
+	],
+	"dev_dependencies": [
+		"Southclaws/zcmd"
 	],
 	"runtime": {
 		"version": "0.3.7",
