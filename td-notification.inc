@@ -159,6 +159,8 @@ public ShowTDNotification(playerid, const reason[800])
     {
         if(TextDrawsNotification[playerid][TDN][Use])
         {
+            new String[800];
+            format(String,sizeof(String), "%s",reason);
             TextDrawsNotification[playerid][TDN][Text] = reason;
             TextDrawsNotification[playerid][TDN][Line] = LinesTDNotification(reason);
             TextDrawSetString(TextDrawsNotification[playerid][TDN][TextDraw], reason);
@@ -205,13 +207,13 @@ stock UpdateTDNotifications(playerid, TDN)
                 TextDrawsNotification[playerid][TDN][MaxPosY] = 0;
                 TextDrawsNotification[playerid][after][MinPosY] = TextDrawsNotification[playerid][TDN][MinPosY];
                 MaxPosYTDNotification(playerid, after);
-                TextDrawSetPos(playerid, TDN, TDN_POS_X, TextDrawsNotification[playerid][after][MinPosY]);
+                TextDrawSetPos(playerid, after, TDN_POS_X, TextDrawsNotification[playerid][after][MinPosY]);
             }
             else
             {
                 TextDrawsNotification[playerid][after][MinPosY] = TDN_DISTANCE + TextDrawsNotification[playerid][before][MaxPosY];
                 MaxPosYTDNotification(playerid, after);
-                TextDrawSetPos(playerid, TDN, TDN_POS_X, TextDrawsNotification[playerid][after][MinPosY]);
+                TextDrawSetPos(playerid, after, TDN_POS_X, TextDrawsNotification[playerid][after][MinPosY]);
             }
             before = after;
         }
