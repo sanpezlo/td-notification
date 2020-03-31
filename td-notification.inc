@@ -98,7 +98,7 @@
     #define TDN_PROPORTIONAL 1
     #define TDN_DISTANCE 5
     #define TDN_MODE_DOWN
-    #define TDN_TIME 10000
+    #define TDN_TIME 30000
 #endif
 
 #define YSI_NO_HEAP_MALLOC
@@ -157,19 +157,20 @@ public ShowTDNotification(playerid, const reason[800])
     new TDN = counter;
     for(new cycle; cycle < MAX_TDN; cycle++)
     {
-        if(TextDrawsNotification[playerid][TDN][Use])
+        if(!TextDrawsNotification[playerid][TDN][Use])
         {
             new String[800];
-            format(String,sizeof(String), "%s",reason);
-            TextDrawsNotification[playerid][TDN][Text] = reason;
-            TextDrawsNotification[playerid][TDN][Line] = LinesTDNotification(reason);
-            TextDrawSetString(TextDrawsNotification[playerid][TDN][TextDraw], reason);
-            TextDrawsNotification[playerid][TDN][Use] = 1;
+            format(String, sizeof(String), "%s", reason);
+            TextDrawsNotification[playerid][TDN][Text] = String;
+            LinesTDNotification(playerid, TDN, String);
+            TextDrawSetString(TextDrawsNotification[playerid][TDN][TextDraw], TextDrawsNotification[playerid][TDN][Text]);
             MinPosYTDNotification(playerid, TDN);
             MaxPosYTDNotification(playerid, TDN);
-            TextDrawSetPos(playerid, TDN, TDN_POS_X, TextDrawsNotification[playerid][TDN][MinPosY]);
+            TextDrawSetPos(playerid, TDN);
+            TextDrawsNotification[playerid][TDN][Use] = 1;
             TextDrawShowForPlayer(playerid, TextDrawsNotification[playerid][TDN][TextDraw]);
             defer TimerHideTDNotification(playerid, TDN);
+            SendClientMessage(playerid, -1, TextDrawsNotification[playerid][TDN][Line]);
             return 1;
         }
         if(TDN == floatsub(MAX_TDN, 1))
@@ -207,13 +208,13 @@ stock UpdateTDNotifications(playerid, TDN)
                 TextDrawsNotification[playerid][TDN][MaxPosY] = 0;
                 TextDrawsNotification[playerid][after][MinPosY] = TextDrawsNotification[playerid][TDN][MinPosY];
                 MaxPosYTDNotification(playerid, after);
-                TextDrawSetPos(playerid, after, TDN_POS_X, TextDrawsNotification[playerid][after][MinPosY]);
+                TextDrawSetPos(playerid, after);
             }
             else
             {
                 TextDrawsNotification[playerid][after][MinPosY] = TDN_DISTANCE + TextDrawsNotification[playerid][before][MaxPosY];
                 MaxPosYTDNotification(playerid, after);
-                TextDrawSetPos(playerid, after, TDN_POS_X, TextDrawsNotification[playerid][after][MinPosY]);
+                TextDrawSetPos(playerid, after);
             }
             before = after;
         }
@@ -229,20 +230,21 @@ stock UpdateTDNotifications(playerid, TDN)
     return 1;
 }
 
-stock LinesTDNotification(const reason[800])
+stock LinesTDNotification(playerid, TDN, const reason[800])
 {
-    new line = 1, before, sub, size;
+    new line = 1, before = 0, sub = 0, size = 0;
     for(new character = 0; character < strlen(reason); character++)
     {
         size += TDN_LETTER_SIZE_X * GetTextDrawCharacterWidth(character, TDN_FONT, TDN_PROPORTIONAL);
-        if(size - sub > floatsub(TDN_SIZE, 1))
+        if(size - sub > TDN_SIZE - 1)
         {
             sub = before * (line + 1);
             line++;
         } 
         before = size;
     }
-    return line;
+    TextDrawsNotification[playerid][TDN][Line] = line;
+    return 1;
 }
 
 stock MinPosYTDNotification(playerid, TDN)
@@ -277,11 +279,14 @@ stock MaxPosYTDNotification(playerid, TDN)
     return 1;
 }
 
-stock TextDrawSetPos(playerid, TDN, Float:PosX, Float:PosY)
+stock TextDrawSetPos(playerid, TDN)
 {
-    TextDrawHideForPlayer(playerid, TextDrawsNotification[playerid][TDN][TextDraw]);
+    if(TextDrawsNotification[playerid][TDN][Use])
+    {
+        TextDrawHideForPlayer(playerid, TextDrawsNotification[playerid][TDN][TextDraw]);
+    }
     TextDrawDestroy(TextDrawsNotification[playerid][TDN][TextDraw]);
-    TextDrawsNotification[playerid][TDN][TextDraw] = TextDrawCreate(PosX, PosY, TextDrawsNotification[playerid][TDN][Text]);
+    TextDrawsNotification[playerid][TDN][TextDraw] = TextDrawCreate(TDN_POS_X, TextDrawsNotification[playerid][TDN][MinPosY], TextDrawsNotification[playerid][TDN][Text]);
     TextDrawFont(TextDrawsNotification[playerid][TDN][TextDraw], TDN_FONT);
     TextDrawLetterSize(TextDrawsNotification[playerid][TDN][TextDraw], TDN_LETTER_SIZE_X, TDN_LETTER_SIZE_Y);
     TextDrawTextSize(TextDrawsNotification[playerid][TDN][TextDraw], floatadd(TDN_POS_X, TDN_SIZE), 1.000000);
