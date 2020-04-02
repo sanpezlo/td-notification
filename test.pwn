@@ -1,10 +1,10 @@
+#pragma compress 0
 #include <a_samp>
-#include <zcmd>
+#include <YSI_Visual/y_commands>
 #define TDN_MODE_DEFAULT
-#include "tdnotification.inc"
+#include "td-notification.inc"
 
 main() {
-	
 }
 
 public OnGameModeInit()

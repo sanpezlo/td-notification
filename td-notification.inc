@@ -2,88 +2,89 @@
     td-notification - Version 0.9
 
     Modes of use:
-
     MAX_TDN: set how many TextDraw will be shown in TextDraw's Notification
+    TDN_POS_X: TextDraw notifications will be at the position set on the X axis
+    TDN_POS_Y: TextDraw notifications will be at the position set on the Y axis
+    TDN_FONT: TextDraw Notification will have the set font
+    TDN_LETTER_SIZE_X: TextDraw notifications will have the set font size on the X axis
+    TDN_LETTER_SIZE_Y: TextDraw notifications will have the set font size on the Y axis
+    TDN_SIZE: TextDraw notifications will have the set width size
+    TDN_COLOR: TextDraw notifications will have the set font color
+    TDN_COLOR_BOX: TextDraw notifications will have the set box color
+    TDN_PROPORTIONAL: TextDraw notifications will have the set proportional
+    TDN_DISTANCE: TextDraw notifications will have the set distance
+    MAX_TDN_TEXT: TextDraw notifications will have a maximum the set text
+    TDN_MODE_DOWN: TextDraw notifications will scroll down
+    TDN_MODE_UP: TextDraw notifications will scroll up
+   
+    TDN_TIME: TextDraw notifications will hide at the set time
+    TDN_MODE_DEFAULT: TextDraw notifications will use the default settings
 
-    TDN_POS_X: TextDraw's notifications will be at the position set on the X axis
-    TDN_POS_Y: TextDraw's notifications will be at the position set on the Y axis
-    TDN_FONT: TextDraw's Notification will have the set font
-    TDN_LETTER_SIZE_X: TextDraw's notifications will have the set font size on the X axis
-    TDN_LETTER_SIZE_Y: TextDraw's notifications will have the set font size on the Y axis
-    TDN_SIZE: TextDraw's notifications will have the set width size
-    TDN_COLOR: TextDraw's notifications will have the set font color
-    TDN_COLOR_BOX: TextDraw's notifications will have the set box color
-    TDN_PROPORTIONAL: TextDraw's notifications will have the set proportional
-    TDN_DISTANCE: TextDraw's notifications will have the set distance
-
-    TDN_MODE_DOWN: TextDraw's notifications will scroll down
-    TDN_MODE_UP: TextDraw's notifications will scroll up
-    
-    TDN_TIME: TextDraw's notifications will hide at the set time
-
-    TDN_MODE_DEFAULT: TextDraw's notifications will use the default settings
-
-	Created by ThePez
+    Created by ThePez - NaS
 */
-
+ 
 #if defined include_td_notification
-	#endinput
+    #endinput
 #endif
 #define include_td_notification
-
+ 
 #if !defined TDN_MODE_DEFAULT
     #if !defined MAX_TDN
         #error "MAX_TDN is not defined"
     #endif
-
+ 
     #if !defined TDN_POS_X
- 	    #error "TDN_POS_X is not defined"
+        #error "TDN_POS_X is not defined"
     #endif
-
+ 
     #if !defined TDN_POS_Y
- 	    #error "TDN_POS_Y is not defined"
+        #error "TDN_POS_Y is not defined"
     #endif
-
+ 
     #if !defined TDN_FONT
- 	    #error "TDN_FONT is not defined"
+        #error "TDN_FONT is not defined"
     #endif
-
+ 
     #if !defined TDN_LETTER_SIZE_X
- 	    #error "TDN_LETTER_SIZE_X is not defined"
+        #error "TDN_LETTER_SIZE_X is not defined"
     #endif
-
+ 
     #if !defined TDN_LETTER_SIZE_Y
- 	    #error "TDN_LETTER_SIZE_Y is not defined"
+        #error "TDN_LETTER_SIZE_Y is not defined"
     #endif
-
+ 
     #if !defined TDN_SIZE
- 	    #error "TDN_SIZE is not defined"
+        #error "TDN_SIZE is not defined"
     #endif
-
+ 
     #if !defined TDN_COLOR
         #error "TDN_COLOR is not defined"
     #endif
-
+ 
     #if !defined TDN_COLOR_BOX
         #error "TDN_COLOR_BOX is not defined"
     #endif
-
+ 
     #if !defined TDN_PROPORTIONAL
         #error "TDN_PROPORTIONAL is not defined"
     #endif
-
+ 
     #if !defined TDN_DISTANCE
         #error "TDN_DISTANCE is not defined"
     #endif
-
+ 
     #if !defined TDN_MODE_DOWN && !defined TDN_MODE_UP
- 	    #error "TDN_MODE is not defined"
+        #error "TDN_MODE is not defined"
     #elseif defined TDN_MODE_DOWN && defined TDN_MODE_UP
         #error "TDN_MODE_DOWN and TDN_MODE_UP is defined"
     #endif
-
+ 
     #if !defined TDN_TIME
         #error "TDN_TIME is not defined"
+    #endif
+ 
+    #if !defined MAX_TDN_TEXT
+        #error "MAX_TDN_TEXT is not defined"
     #endif
 #else
     #define MAX_TDN 4
@@ -98,79 +99,83 @@
     #define TDN_PROPORTIONAL 1
     #define TDN_DISTANCE 5
     #define TDN_MODE_DOWN
-    #define TDN_TIME 30000
+    #define TDN_TIME 10000
+    #define MAX_TDN_TEXT 800
 #endif
-
+ 
 #define YSI_NO_HEAP_MALLOC
-
+ 
 #include <YSI_Coding\y_hooks>
 #include <YSI_Coding\y_timers>
 #include <td-string-width>
-
+ 
 enum InformationTDN
 {
     Use,
     Line,
-    Text[800],
+    Text[MAX_TDN_TEXT],
     Text:TextDraw,
     Float:MinPosY,
     Float:MaxPosY
 }
 new TextDrawsNotification[MAX_PLAYERS][MAX_TDN][InformationTDN],
     counter = 0;
-
+ 
 hook OnGameModeInit()
 {
     for(new playerid = 0; playerid < MAX_PLAYERS; playerid++)
     {
         for(new TDN = 0; TDN < MAX_TDN; TDN++)
         {
-            TextDrawsNotification[playerid][TDN][TextDraw] = TextDrawCreate(TDN_POS_X, TDN_POS_Y, "TDNotifications");
-            TextDrawFont(TextDrawsNotification[playerid][TDN][TextDraw], TDN_FONT);
-            TextDrawLetterSize(TextDrawsNotification[playerid][TDN][TextDraw], TDN_LETTER_SIZE_X, TDN_LETTER_SIZE_Y);
-            TextDrawTextSize(TextDrawsNotification[playerid][TDN][TextDraw], floatadd(TDN_POS_X, TDN_SIZE), 1.000000);
-            TextDrawSetOutline(TextDrawsNotification[playerid][TDN][TextDraw], 1);
-            TextDrawSetShadow(TextDrawsNotification[playerid][TDN][TextDraw], 0);
-            TextDrawAlignment(TextDrawsNotification[playerid][TDN][TextDraw], 1);
-            TextDrawColor(TextDrawsNotification[playerid][TDN][TextDraw], TDN_COLOR);
-            TextDrawBackgroundColor(TextDrawsNotification[playerid][TDN][TextDraw], TDN_COLOR_BOX);
-            TextDrawBoxColor(TextDrawsNotification[playerid][TDN][TextDraw], TDN_COLOR_BOX);
-            TextDrawUseBox(TextDrawsNotification[playerid][TDN][TextDraw], 1);
-            TextDrawSetProportional(TextDrawsNotification[playerid][TDN][TextDraw], TDN_PROPORTIONAL);
-            TextDrawSetSelectable(TextDrawsNotification[playerid][TDN][TextDraw], 0);
+            TextDrawsNotification[playerid][TDN][TextDraw] = Text:-1;
         }
     }
     return 1;
 }
-
+ 
+hook OnFilterScriptInit()
+{
+    for(new playerid = 0; playerid < MAX_PLAYERS; playerid++)
+    {
+        for(new TDN = 0; TDN < MAX_TDN; TDN++)
+        {
+            TextDrawsNotification[playerid][TDN][TextDraw] = Text:-1;
+        }
+    }
+    return 1;
+}
+ 
 timer TimerHideTDNotification[TDN_TIME](playerid, TDN)
 {
     TextDrawsNotification[playerid][TDN][Use] = 0;
-    TextDrawHideForPlayer(playerid, TextDrawsNotification[playerid][TDN][TextDraw]);
-    UpdateTDNotifications(playerid, TDN);
+    if(TextDrawsNotification[playerid][TDN][TextDraw] != Text:-1)
+    {
+        TextDrawDestroy(TextDrawsNotification[playerid][TDN][TextDraw]);
+        TextDrawsNotification[playerid][TDN][TextDraw] = Text:-1;
+    }
+    UpdateTDNotifications(playerid);
     return 1;
 }
-
-forward ShowTDNotification(playerid, const reason[800]);
-public ShowTDNotification(playerid, const reason[800])
+ 
+forward ShowTDNotification(playerid, const reason[]);
+public ShowTDNotification(playerid, const reason[])
 {
     new TDN = counter;
     for(new cycle; cycle < MAX_TDN; cycle++)
     {
         if(!TextDrawsNotification[playerid][TDN][Use])
         {
-            new String[800];
-            format(String, sizeof(String), "%s", reason);
-            TextDrawsNotification[playerid][TDN][Text] = String;
-            LinesTDNotification(playerid, TDN, String);
-            TextDrawSetString(TextDrawsNotification[playerid][TDN][TextDraw], TextDrawsNotification[playerid][TDN][Text]);
+            TextDrawsNotification[playerid][TDN][Text][0] = EOS;
+            strcat(TextDrawsNotification[playerid][TDN][Text], reason, MAX_TDN_TEXT);
+ 
+            TextDrawsNotification[playerid][TDN][Use] = 1;
+ 
+            LinesTDNotification(playerid, TDN);
             MinPosYTDNotification(playerid, TDN);
             MaxPosYTDNotification(playerid, TDN);
             TextDrawSetPos(playerid, TDN);
-            TextDrawsNotification[playerid][TDN][Use] = 1;
-            TextDrawShowForPlayer(playerid, TextDrawsNotification[playerid][TDN][TextDraw]);
+
             defer TimerHideTDNotification(playerid, TDN);
-            SendClientMessage(playerid, -1, TextDrawsNotification[playerid][TDN][Line]);
             return 1;
         }
         if(TDN == floatsub(MAX_TDN, 1))
@@ -185,68 +190,71 @@ public ShowTDNotification(playerid, const reason[800])
     return 0;
 }
 
-stock UpdateTDNotifications(playerid, TDN)
+stock UpdateTDNotifications(playerid)
 {
-    new after = counter,
-        before;
-    if(TDN == MAX_TDN - 1)
+    new before = -1, Float:y_last;
+ 
+    for(new cycle = 0; cycle < MAX_TDN; cycle ++)
     {
-        counter = 0;
-    }
-    else
-    {
-        counter = TDN + 1;
-    }
-    for(new cycle; cycle < MAX_TDN - 1; cycle++)
-    {
-        if(TextDrawsNotification[playerid][TDN][Use])
+        if(TextDrawsNotification[playerid][cycle][Use])
         {
-            if(cycle == 0)
+            if(before == -1)
             {
-                TextDrawsNotification[playerid][TDN][Line] = 0;
-                TextDrawsNotification[playerid][TDN][MinPosY] = 0;
-                TextDrawsNotification[playerid][TDN][MaxPosY] = 0;
-                TextDrawsNotification[playerid][after][MinPosY] = TextDrawsNotification[playerid][TDN][MinPosY];
-                MaxPosYTDNotification(playerid, after);
-                TextDrawSetPos(playerid, after);
+                TextDrawsNotification[playerid][cycle][MinPosY] = TDN_POS_Y;
+                MaxPosYTDNotification(playerid, cycle);
+ 
+                y_last = TextDrawsNotification[playerid][cycle][MaxPosY];
             }
             else
             {
-                TextDrawsNotification[playerid][after][MinPosY] = TDN_DISTANCE + TextDrawsNotification[playerid][before][MaxPosY];
-                MaxPosYTDNotification(playerid, after);
-                TextDrawSetPos(playerid, after);
+                TextDrawsNotification[playerid][cycle][MinPosY] = y_last + TDN_DISTANCE;
+                MaxPosYTDNotification(playerid, cycle);
+ 
+                y_last = TextDrawsNotification[playerid][cycle][MaxPosY];
             }
-            before = after;
-        }
-        if(after == MAX_TDN - 1)
-        {
-            after = 0;
-        }
-        else
-        {
-            after++;
+ 
+            TextDrawSetPos(playerid, cycle);
+ 
+            before = cycle;
         }
     }
+ 
     return 1;
 }
-
-stock LinesTDNotification(playerid, TDN, const reason[800])
+ 
+stock LinesTDNotification(playerid, TDN)
 {
-    new line = 1, before = 0, sub = 0, size = 0;
-    for(new character = 0; character < strlen(reason); character++)
+    new lines = 1, width, lastspace = -1, len = strlen(TextDrawsNotification[playerid][TDN][Text]);
+ 
+    for(new i = 0; i < len; i ++)
     {
-        size += TDN_LETTER_SIZE_X * GetTextDrawCharacterWidth(character, TDN_FONT, TDN_PROPORTIONAL);
-        if(size - sub > TDN_SIZE - 1)
+        if(TextDrawsNotification[playerid][TDN][Text][i] == ' ') lastspace = i;
+ 
+        width += floatround(TDN_LETTER_SIZE_X * GetTextDrawCharacterWidth(TextDrawsNotification[playerid][TDN][Text][i], TDN_FONT, bool:TDN_PROPORTIONAL), floatround_ceil);
+ 
+        if(width > TDN_SIZE - 1)
         {
-            sub = before * (line + 1);
-            line++;
-        } 
-        before = size;
+            if(lastspace != i && lastspace != -1)
+            {
+                lines ++;
+                i = lastspace;
+                lastspace = -1;
+                width = 0;
+            }
+            else
+            {
+                lines ++;
+                lastspace = -1;
+                width = 0;
+            }
+        }
     }
-    TextDrawsNotification[playerid][TDN][Line] = line;
+ 
+    TextDrawsNotification[playerid][TDN][Line] = lines;
+ 
     return 1;
 }
-
+ 
 stock MinPosYTDNotification(playerid, TDN)
 {
     new before;
@@ -268,7 +276,7 @@ stock MinPosYTDNotification(playerid, TDN)
     }
     return 1;
 }
-
+ 
 stock MaxPosYTDNotification(playerid, TDN)
 {
     new Float:up = (TDN_LETTER_SIZE_Y * 2) + 2;
@@ -278,14 +286,14 @@ stock MaxPosYTDNotification(playerid, TDN)
     TextDrawsNotification[playerid][TDN][MaxPosY] = TextDrawsNotification[playerid][TDN][MinPosY] + up + letter + middle + down;
     return 1;
 }
-
+ 
 stock TextDrawSetPos(playerid, TDN)
 {
-    if(TextDrawsNotification[playerid][TDN][Use])
+    if(TextDrawsNotification[playerid][TDN][TextDraw] != Text:-1)
     {
-        TextDrawHideForPlayer(playerid, TextDrawsNotification[playerid][TDN][TextDraw]);
+        TextDrawDestroy(TextDrawsNotification[playerid][TDN][TextDraw]);
     }
-    TextDrawDestroy(TextDrawsNotification[playerid][TDN][TextDraw]);
+   
     TextDrawsNotification[playerid][TDN][TextDraw] = TextDrawCreate(TDN_POS_X, TextDrawsNotification[playerid][TDN][MinPosY], TextDrawsNotification[playerid][TDN][Text]);
     TextDrawFont(TextDrawsNotification[playerid][TDN][TextDraw], TDN_FONT);
     TextDrawLetterSize(TextDrawsNotification[playerid][TDN][TextDraw], TDN_LETTER_SIZE_X, TDN_LETTER_SIZE_Y);
