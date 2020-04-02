@@ -14,6 +14,13 @@ public OnPlayerConnect(playerid)
     return 1;
 }
 
+CMD:spawn(playerid, params[])
+{
+    SetSpawnInfo(playerid, 0, 46, 1484.1082, -1668.4976, 14.9159, 0, 0,0,0,0,0,0);
+    SpawnPlayer(playerid);
+    return 1;
+}
+
 CMD:td(playerid, params[])
 {
     ShowTDNotification(playerid, params);
