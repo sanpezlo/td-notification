@@ -99,7 +99,7 @@
     #define TDN_PROPORTIONAL 1
     #define TDN_DISTANCE 5
     #define TDN_MODE_DOWN
-    #define TDN_TIME 10000
+    #define TDN_TIME 20000
     #define MAX_TDN_TEXT 800
 #endif
  
@@ -279,11 +279,11 @@ stock MinPosYTDNotification(playerid, TDN)
  
 stock MaxPosYTDNotification(playerid, TDN)
 {
-    new Float:up = (TDN_LETTER_SIZE_Y * 2) + 2;
-    new Float:letter = (TDN_LETTER_SIZE_Y * 6) * TextDrawsNotification[playerid][TDN][Line];
-    new Float:middle = (TextDrawsNotification[playerid][TDN][Line] - 1) * ((TDN_LETTER_SIZE_Y * 2) + 2 + TDN_LETTER_SIZE_Y + 2);
-    new Float:down = TDN_LETTER_SIZE_Y + 2;
-    TextDrawsNotification[playerid][TDN][MaxPosY] = TextDrawsNotification[playerid][TDN][MinPosY] + up + letter + middle + down;
+    /*new Float:up = (TDN_LETTER_SIZE_Y * 2) + 2;
+    new Float:letter = (TDN_LETTER_SIZE_Y * 5.75) * TextDrawsNotification[playerid][TDN][Line];
+    new Float:middle = (TextDrawsNotification[playerid][TDN][Line] - 1) * ((TDN_LETTER_SIZE_Y * 2) + 2 + TDN_LETTER_SIZE_Y - 1);
+    new Float:down = TDN_LETTER_SIZE_Y + 3;*/
+    TextDrawsNotification[playerid][TDN][MaxPosY] = TextDrawsNotification[playerid][TDN][MinPosY] + (TDN_LETTER_SIZE_Y * 2) + 2 + (TDN_LETTER_SIZE_Y * 5.75 * TextDrawsNotification[playerid][TDN][Line]) + ((TextDrawsNotification[playerid][TDN][Line] - 1) * ((TDN_LETTER_SIZE_Y * 2) + 2 + TDN_LETTER_SIZE_Y - 1)) + TDN_LETTER_SIZE_Y + 3;
     return 1;
 }
  

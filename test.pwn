@@ -1,26 +1,22 @@
 #pragma compress 0
 #include <a_samp>
-#include <YSI_Visual/y_commands>
+#include <zcmd>
 #define TDN_MODE_DEFAULT
 #include "td-notification.inc"
 
 main() {
 }
 
-public OnGameModeInit()
-{
-    return 1;
-}
-
-CMD:spawn(playerid, params[])
+public OnPlayerConnect(playerid)
 {
     SetSpawnInfo(playerid, 0, 46, 1484.1082, -1668.4976, 14.9159, 0, 0,0,0,0,0,0);
     SpawnPlayer(playerid);
     return 1;
 }
 
-public OnPlayerSpawn(playerid)
+CMD:td(playerid, params[])
 {
+    ShowTDNotification(playerid, params);
     return 1;
 }
 
