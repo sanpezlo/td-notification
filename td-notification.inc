@@ -90,7 +90,7 @@
     #define MAX_TDN 4
     #define TDN_POS_X 497.000000
     #define TDN_POS_Y 130.000000
-    #define TDN_FONT 1
+    #define TDN_FONT 3
     #define TDN_LETTER_SIZE_X 0.250000
     #define TDN_LETTER_SIZE_Y 1.000000
     #define TDN_SIZE 112.000000
@@ -171,8 +171,20 @@ public ShowTDNotification(playerid, const reason[])
             TextDrawsNotification[playerid][TDN][Use] = 1;
  
             LinesTDNotification(playerid, TDN);
+            #if defined TDN_MODE_DOWN
+
             MinPosYTDNotification(playerid, TDN);
             MaxPosYTDNotification(playerid, TDN);
+
+            #endif
+
+            #if defined TDN_MODE_UP
+
+            MaxPosYTDNotification(playerid, TDN);
+            MinPosYTDNotification(playerid, TDN);
+            
+            #endif
+
             TextDrawSetPos(playerid, TDN);
 
             defer TimerHideTDNotification(playerid, TDN);
@@ -200,17 +212,43 @@ stock UpdateTDNotifications(playerid)
         {
             if(before == -1)
             {
+                #if defined TDN_MODE_DOWN
+
                 TextDrawsNotification[playerid][cycle][MinPosY] = TDN_POS_Y;
                 MaxPosYTDNotification(playerid, cycle);
  
                 y_last = TextDrawsNotification[playerid][cycle][MaxPosY];
+                
+                #endif
+
+                #if defined TDN_MODE_UP
+                
+                TextDrawsNotification[playerid][cycle][MaxPosY] = TDN_POS_Y;
+                MinPosYTDNotification(playerid, cycle);
+ 
+                y_last = TextDrawsNotification[playerid][cycle][MinPosY];
+                
+                #endif
             }
             else
             {
+                #if defined TDN_MODE_DOWN
+
                 TextDrawsNotification[playerid][cycle][MinPosY] = y_last + TDN_DISTANCE;
                 MaxPosYTDNotification(playerid, cycle);
  
                 y_last = TextDrawsNotification[playerid][cycle][MaxPosY];
+                
+                #endif
+
+                #if defined TDN_MODE_UP
+                
+                TextDrawsNotification[playerid][cycle][MaxPosY] = y_last - TDN_DISTANCE;
+                MinPosYTDNotification(playerid, cycle);
+ 
+                y_last = TextDrawsNotification[playerid][cycle][MinPosY];
+                
+                #endif
             }
  
             TextDrawSetPos(playerid, cycle);
@@ -221,7 +259,77 @@ stock UpdateTDNotifications(playerid)
  
     return 1;
 }
- 
+
+stock MinPosYTDNotification(playerid, TDN)
+{
+    #if defined TDN_MODE_DOWN
+
+    new before;
+    if(TDN == 0)
+    {
+        before = MAX_TDN - 1;
+    }
+    else
+    {
+        before = TDN - 1;
+    }
+    if(!TextDrawsNotification[playerid][before][Use])
+    {
+        TextDrawsNotification[playerid][TDN][MinPosY] = TDN_POS_Y;
+    }
+    else
+    {
+        TextDrawsNotification[playerid][TDN][MinPosY] = TDN_DISTANCE + TextDrawsNotification[playerid][before][MaxPosY];
+    }
+    return 1;
+
+    #endif
+
+    #if defined TDN_MODE_UP
+
+    new Float:up = (TDN_LETTER_SIZE_Y * 2) + 2;
+    new Float:letter = (TDN_LETTER_SIZE_Y * 5.75) * TextDrawsNotification[playerid][TDN][Line];
+    new Float:middle = (TextDrawsNotification[playerid][TDN][Line] - 1) * ((TDN_LETTER_SIZE_Y * 2) + 2 + TDN_LETTER_SIZE_Y - 1);
+    new Float:down = TDN_LETTER_SIZE_Y + 3;
+    TextDrawsNotification[playerid][TDN][MinPosY] = TextDrawsNotification[playerid][TDN][MaxPosY] - up - letter - middle - down;
+    return 1;
+
+    #endif
+}
+
+stock MaxPosYTDNotification(playerid, TDN)
+{
+    #if defined TDN_MODE_DOWN
+
+    TextDrawsNotification[playerid][TDN][MaxPosY] = TextDrawsNotification[playerid][TDN][MinPosY] + (TDN_LETTER_SIZE_Y * 2) + 2 + (TDN_LETTER_SIZE_Y * 5.75 * TextDrawsNotification[playerid][TDN][Line]) + ((TextDrawsNotification[playerid][TDN][Line] - 1) * ((TDN_LETTER_SIZE_Y * 2) + 2 + TDN_LETTER_SIZE_Y - 1)) + TDN_LETTER_SIZE_Y + 3;
+    return 1;
+
+    #endif
+
+    #if defined TDN_MODE_UP
+
+    new before;
+    if(TDN == 0)
+    {
+        before = MAX_TDN - 1;
+    }
+    else
+    {
+        before = TDN - 1;
+    }
+    if(!TextDrawsNotification[playerid][before][Use])
+    {
+        TextDrawsNotification[playerid][TDN][MaxPosY] = TDN_POS_Y;
+    }
+    else
+    {
+        TextDrawsNotification[playerid][TDN][MaxPosY] = TextDrawsNotification[playerid][before][MinPosY] - TDN_DISTANCE;
+    }
+    return 1;
+
+    #endif
+}
+
 stock LinesTDNotification(playerid, TDN)
 {
     new lines = 1, width, lastspace = -1, len = strlen(TextDrawsNotification[playerid][TDN][Text]);
@@ -254,39 +362,7 @@ stock LinesTDNotification(playerid, TDN)
  
     return 1;
 }
- 
-stock MinPosYTDNotification(playerid, TDN)
-{
-    new before;
-    if(TDN == 0)
-    {
-        before = MAX_TDN - 1;
-    }
-    else
-    {
-        before = TDN - 1;
-    }
-    if(!TextDrawsNotification[playerid][before][Use])
-    {
-        TextDrawsNotification[playerid][TDN][MinPosY] = TDN_POS_Y;
-    }
-    else
-    {
-        TextDrawsNotification[playerid][TDN][MinPosY] = TDN_DISTANCE + TextDrawsNotification[playerid][before][MaxPosY];
-    }
-    return 1;
-}
- 
-stock MaxPosYTDNotification(playerid, TDN)
-{
-    /*new Float:up = (TDN_LETTER_SIZE_Y * 2) + 2;
-    new Float:letter = (TDN_LETTER_SIZE_Y * 5.75) * TextDrawsNotification[playerid][TDN][Line];
-    new Float:middle = (TextDrawsNotification[playerid][TDN][Line] - 1) * ((TDN_LETTER_SIZE_Y * 2) + 2 + TDN_LETTER_SIZE_Y - 1);
-    new Float:down = TDN_LETTER_SIZE_Y + 3;*/
-    TextDrawsNotification[playerid][TDN][MaxPosY] = TextDrawsNotification[playerid][TDN][MinPosY] + (TDN_LETTER_SIZE_Y * 2) + 2 + (TDN_LETTER_SIZE_Y * 5.75 * TextDrawsNotification[playerid][TDN][Line]) + ((TextDrawsNotification[playerid][TDN][Line] - 1) * ((TDN_LETTER_SIZE_Y * 2) + 2 + TDN_LETTER_SIZE_Y - 1)) + TDN_LETTER_SIZE_Y + 3;
-    return 1;
-}
- 
+
 stock TextDrawSetPos(playerid, TDN)
 {
     if(TextDrawsNotification[playerid][TDN][TextDraw] != Text:-1)
