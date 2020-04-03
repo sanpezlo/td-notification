@@ -16,8 +16,8 @@
     MAX_TDN_TEXT: TextDraw notifications will have a maximum the set text
     TDN_MODE_DOWN: TextDraw notifications will scroll down
     TDN_MODE_UP: TextDraw notifications will scroll up
-   
     TDN_TIME: TextDraw notifications will hide at the set time
+    
     TDN_MODE_DEFAULT: TextDraw notifications will use the default settings
 
     Created by ThePez - NaS
@@ -87,7 +87,7 @@
         #error "MAX_TDN_TEXT is not defined"
     #endif
 #else
-    #define MAX_TDN 4
+    #define MAX_TDN 1
     #define TDN_POS_X 497.000000
     #define TDN_POS_Y 130.000000
     #define TDN_FONT 3
