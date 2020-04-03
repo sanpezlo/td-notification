@@ -17,7 +17,7 @@
     TDN_MODE_DOWN: TextDraw notifications will scroll down
     TDN_MODE_UP: TextDraw notifications will scroll up
     TDN_TIME: TextDraw notifications will hide at the set time
-    
+
     TDN_MODE_DEFAULT: TextDraw notifications will use the default settings
 
     Created by ThePez - NaS
@@ -87,10 +87,10 @@
         #error "MAX_TDN_TEXT is not defined"
     #endif
 #else
-    #define MAX_TDN 1
+    #define MAX_TDN 4
     #define TDN_POS_X 497.000000
     #define TDN_POS_Y 130.000000
-    #define TDN_FONT 3
+    #define TDN_FONT 1
     #define TDN_LETTER_SIZE_X 0.250000
     #define TDN_LETTER_SIZE_Y 1.000000
     #define TDN_SIZE 112.000000
@@ -157,8 +157,7 @@ timer TimerHideTDNotification[TDN_TIME](playerid, TDN)
     return 1;
 }
  
-forward ShowTDNotification(playerid, const reason[]);
-public ShowTDNotification(playerid, const reason[])
+stock ShowTDNotification(playerid, const reason[], hide = 1, timer = 0)
 {
     new TDN = counter;
     for(new cycle; cycle < MAX_TDN; cycle++)
@@ -171,6 +170,7 @@ public ShowTDNotification(playerid, const reason[])
             TextDrawsNotification[playerid][TDN][Use] = 1;
  
             LinesTDNotification(playerid, TDN);
+
             #if defined TDN_MODE_DOWN
 
             MinPosYTDNotification(playerid, TDN);
@@ -187,7 +187,21 @@ public ShowTDNotification(playerid, const reason[])
 
             TextDrawSetPos(playerid, TDN);
 
-            defer TimerHideTDNotification(playerid, TDN);
+            if(hide)
+            {
+                if(timer == 0)
+                {
+                    defer TimerHideTDNotification(playerid, TDN);
+                }
+                else
+                {
+                    defer TimerHideTDNotification[timer](playerid, TDN);
+                }
+            }
+            else
+            {
+                return TDN;
+            }
             return 1;
         }
         if(TDN == floatsub(MAX_TDN, 1))
@@ -198,6 +212,22 @@ public ShowTDNotification(playerid, const reason[])
         {
             TDN++;
         }
+    }
+    return 0;
+}
+
+stock hideTDNotification(playerid, TDN)
+{
+    if(TextDrawsNotification[playerid][TDN][Use])
+    {
+        TextDrawsNotification[playerid][TDN][Use] = 0;
+        if(TextDrawsNotification[playerid][TDN][TextDraw] != Text:-1)
+        {
+            TextDrawDestroy(TextDrawsNotification[playerid][TDN][TextDraw]);
+            TextDrawsNotification[playerid][TDN][TextDraw] = Text:-1;
+        }
+        UpdateTDNotifications(playerid);
+        return 1;
     }
     return 0;
 }

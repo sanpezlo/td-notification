@@ -23,7 +23,9 @@ CMD:spawn(playerid, params[])
 
 CMD:td(playerid, params[])
 {
-    ShowTDNotification(playerid, params);
+    new v[1];
+    format(v, sizeof(v), "%d", ShowTDNotification(playerid, params, 0));
+    SendClientMessage(playerid, -1, v);
     return 1;
 }
 
