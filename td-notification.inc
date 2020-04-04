@@ -116,10 +116,11 @@ enum InformationTDN
     Text[MAX_TDN_TEXT],
     Text:TextDraw,
     Float:MinPosY,
-    Float:MaxPosY
+    Float:MaxPosY,
+    Hide
 }
 new TextDrawsNotification[MAX_PLAYERS][MAX_TDN][InformationTDN];
- 
+
 hook OnGameModeInit()
 {
     for(new playerid = 0; playerid < MAX_PLAYERS; playerid++)
@@ -144,19 +145,30 @@ hook OnFilterScriptInit()
     return 1;
 }
  
-timer TimerHideTDNotification[TDN_TIME](playerid, TDN)
+timer TimerHideTDN[TDN_TIME](playerid)
 {
-    TextDrawsNotification[playerid][TDN][Use] = 0;
-    if(TextDrawsNotification[playerid][TDN][TextDraw] != Text:-1)
+    for(new cycle; cycle < MAX_TDN; cycle++)
     {
-        TextDrawDestroy(TextDrawsNotification[playerid][TDN][TextDraw]);
-        TextDrawsNotification[playerid][TDN][TextDraw] = Text:-1;
+        if(TextDrawsNotification[playerid][cycle][Hide] == -1)
+        {
+            TextDrawsNotification[playerid][cycle][Use] = 0;
+            if(TextDrawsNotification[playerid][cycle][TextDraw] != Text:-1)
+            {
+                TextDrawDestroy(TextDrawsNotification[playerid][cycle][TextDraw]);
+                TextDrawsNotification[playerid][cycle][Line] = 0;
+                TextDrawsNotification[playerid][cycle][Text][0] = EOS;
+                TextDrawsNotification[playerid][cycle][MinPosY] = 0;
+                TextDrawsNotification[playerid][cycle][MaxPosY] = 0;
+                TextDrawsNotification[playerid][cycle][Hide] = -1;
+            }
+            UpdateTDN(playerid);
+            return 1;
+        }
     }
-    UpdateTDNotifications(playerid);
-    return 1;
+    return 0;
 }
  
-stock ShowTDNotification(playerid, const reason[], hide = 1, timer = 0)
+stock ShowTDN(playerid, const reason[], hide = -1)
 {
     for(new cycle; cycle < MAX_TDN; cycle++)
     {
@@ -167,38 +179,33 @@ stock ShowTDNotification(playerid, const reason[], hide = 1, timer = 0)
  
             TextDrawsNotification[playerid][cycle][Use] = 1;
  
-            LinesTDNotification(playerid, cycle);
+            LinesTDN(playerid, cycle);
 
             #if defined TDN_MODE_DOWN
 
-            MinPosYTDNotification(playerid, cycle);
-            MaxPosYTDNotification(playerid, cycle);
+            MinPosYTDN(playerid, cycle);
+            MaxPosYTDN(playerid, cycle);
 
             #endif
 
             #if defined TDN_MODE_UP
 
-            MaxPosYTDNotification(playerid, cycle);
-            MinPosYTDNotification(playerid, cycle);
+            MaxPosYTDN(playerid, cycle);
+            MinPosYTDN(playerid, cycle);
             
             #endif
 
             TextDrawSetPos(playerid, cycle);
 
-            if(hide)
+            if(hide == -1)
             {
-                if(timer == 0)
-                {
-                    defer TimerHideTDNotification(playerid, cycle);
-                }
-                else
-                {
-                    defer TimerHideTDNotification[timer](playerid, cycle);
-                }
+                TextDrawsNotification[playerid][cycle][Hide] = -1;
+                defer TimerHideTDN(playerid);
             }
             else
             {
-                return cycle;
+                TextDrawsNotification[playerid][cycle][Hide] = hide;
+                return hide;
             }
             return 1;
         }
@@ -206,23 +213,30 @@ stock ShowTDNotification(playerid, const reason[], hide = 1, timer = 0)
     return 0;
 }
 
-stock hideTDNotification(playerid, TDN)
+stock hideTDN(playerid, TDN)
 {
-    if(TextDrawsNotification[playerid][TDN][Use])
+    for(new cycle; cycle < MAX_TDN; cycle++)
     {
-        TextDrawsNotification[playerid][TDN][Use] = 0;
-        if(TextDrawsNotification[playerid][TDN][TextDraw] != Text:-1)
+        if(TextDrawsNotification[playerid][cycle][Hide] == TDN)
         {
-            TextDrawDestroy(TextDrawsNotification[playerid][TDN][TextDraw]);
-            TextDrawsNotification[playerid][TDN][TextDraw] = Text:-1;
+            TextDrawsNotification[playerid][cycle][Use] = 0;
+            if(TextDrawsNotification[playerid][cycle][TextDraw] != Text:-1)
+            {
+                TextDrawDestroy(TextDrawsNotification[playerid][cycle][TextDraw]);
+                TextDrawsNotification[playerid][cycle][Line] = 0;
+                TextDrawsNotification[playerid][cycle][Text][0] = EOS;
+                TextDrawsNotification[playerid][cycle][MinPosY] = 0;
+                TextDrawsNotification[playerid][cycle][MaxPosY] = 0;
+                TextDrawsNotification[playerid][cycle][Hide] = -1;
+            }
+            UpdateTDN(playerid);
+            return 1;
         }
-        UpdateTDNotifications(playerid);
-        return 1;
     }
     return 0;
 }
 
-stock UpdateTDNotifications(playerid)
+stock UpdateTDN(playerid)
 {
     for(new cycle = 0; cycle < MAX_TDN; cycle ++)
     {
@@ -230,12 +244,13 @@ stock UpdateTDNotifications(playerid)
         {
             if(cycle != MAX_TDN - 1)
             {
-                if(!TextDrawsNotification[playerid][cycle + 1][Use])
+                if(TextDrawsNotification[playerid][cycle + 1][Use])
                 {
                     TextDrawsNotification[playerid][cycle][Use] = TextDrawsNotification[playerid][cycle + 1][Use];
                     TextDrawsNotification[playerid][cycle][Line] = TextDrawsNotification[playerid][cycle + 1][Line];
-                    TextDrawsNotification[playerid][cycle][Text] = TextDrawsNotification[playerid][cycle + 1][Text];
+                    strcat(TextDrawsNotification[playerid][cycle][Text], TextDrawsNotification[playerid][cycle + 1][Text], MAX_TDN_TEXT);
                     TextDrawsNotification[playerid][cycle][TextDraw] = TextDrawsNotification[playerid][cycle + 1][TextDraw];
+                    TextDrawsNotification[playerid][cycle][Hide] = TextDrawsNotification[playerid][cycle + 1][Hide];
 
                     TextDrawsNotification[playerid][cycle + 1][Use] = 0;
                     TextDrawsNotification[playerid][cycle + 1][Line] = 0;
@@ -243,18 +258,19 @@ stock UpdateTDNotifications(playerid)
                     TextDrawsNotification[playerid][cycle + 1][TextDraw] = Text:-1;
                     TextDrawsNotification[playerid][cycle + 1][MinPosY] = 0;
                     TextDrawsNotification[playerid][cycle + 1][MaxPosY] = 0;
+                    TextDrawsNotification[playerid][cycle + 1][Hide] = -1;
 
                     #if defined TDN_MODE_DOWN
 
-                    MinPosYTDNotification(playerid, cycle);
-                    MaxPosYTDNotification(playerid, cycle);
+                    MinPosYTDN(playerid, cycle);
+                    MaxPosYTDN(playerid, cycle);
                     
                     #endif
 
                     #if defined TDN_MODE_UP
                     
-                    MaxPosYTDNotification(playerid, cycle);
-                    MinPosYTDNotification(playerid, cycle);
+                    MaxPosYTDN(playerid, cycle);
+                    MinPosYTDN(playerid, cycle);
                     
                     #endif       
                 }
@@ -268,8 +284,9 @@ stock UpdateTDNotifications(playerid)
                 {
                     TextDrawsNotification[playerid][cycle - 1][Use] = TextDrawsNotification[playerid][cycle][Use];
                     TextDrawsNotification[playerid][cycle - 1][Line] = TextDrawsNotification[playerid][cycle][Line];
-                    TextDrawsNotification[playerid][cycle - 1][Text] = TextDrawsNotification[playerid][cycle][Text];
+                    strcat(TextDrawsNotification[playerid][cycle - 1][Text], TextDrawsNotification[playerid][cycle][Text], MAX_TDN_TEXT);
                     TextDrawsNotification[playerid][cycle - 1][TextDraw] = TextDrawsNotification[playerid][cycle][TextDraw];
+                    TextDrawsNotification[playerid][cycle - 1][Hide] = TextDrawsNotification[playerid][cycle][Hide];
 
                     TextDrawsNotification[playerid][cycle][Use] = 0;
                     TextDrawsNotification[playerid][cycle][Line] = 0;
@@ -277,18 +294,19 @@ stock UpdateTDNotifications(playerid)
                     TextDrawsNotification[playerid][cycle][TextDraw] = Text:-1;
                     TextDrawsNotification[playerid][cycle][MinPosY] = 0;
                     TextDrawsNotification[playerid][cycle][MaxPosY] = 0;
+                    TextDrawsNotification[playerid][cycle][Hide] = -1;
 
                     #if defined TDN_MODE_DOWN
 
-                    MinPosYTDNotification(playerid, cycle);
-                    MaxPosYTDNotification(playerid, cycle);
+                    MinPosYTDN(playerid, cycle - 1);
+                    MaxPosYTDN(playerid, cycle - 1);
                     
                     #endif
 
                     #if defined TDN_MODE_UP
                     
-                    MaxPosYTDNotification(playerid, cycle);
-                    MinPosYTDNotification(playerid, cycle);
+                    MaxPosYTDN(playerid, cycle - 1);
+                    MinPosYTDN(playerid, cycle - 1);
                     
                     #endif
                 }
@@ -299,26 +317,17 @@ stock UpdateTDNotifications(playerid)
     return 1;
 }
 
-stock MinPosYTDNotification(playerid, TDN)
+stock MinPosYTDN(playerid, TDN)
 {
     #if defined TDN_MODE_DOWN
 
-    new before;
     if(TDN == 0)
-    {
-        before = MAX_TDN - 1;
-    }
-    else
-    {
-        before = TDN - 1;
-    }
-    if(!TextDrawsNotification[playerid][before][Use])
     {
         TextDrawsNotification[playerid][TDN][MinPosY] = TDN_POS_Y;
     }
     else
     {
-        TextDrawsNotification[playerid][TDN][MinPosY] = TDN_DISTANCE + TextDrawsNotification[playerid][before][MaxPosY];
+        TextDrawsNotification[playerid][TDN][MinPosY] = TextDrawsNotification[playerid][TDN - 1][MaxPosY] + TDN_DISTANCE;
     }
     return 1;
 
@@ -336,7 +345,7 @@ stock MinPosYTDNotification(playerid, TDN)
     #endif
 }
 
-stock MaxPosYTDNotification(playerid, TDN)
+stock MaxPosYTDN(playerid, TDN)
 {
     #if defined TDN_MODE_DOWN
 
@@ -347,29 +356,20 @@ stock MaxPosYTDNotification(playerid, TDN)
 
     #if defined TDN_MODE_UP
 
-    new before;
     if(TDN == 0)
-    {
-        before = MAX_TDN - 1;
-    }
-    else
-    {
-        before = TDN - 1;
-    }
-    if(!TextDrawsNotification[playerid][before][Use])
     {
         TextDrawsNotification[playerid][TDN][MaxPosY] = TDN_POS_Y;
     }
     else
     {
-        TextDrawsNotification[playerid][TDN][MaxPosY] = TextDrawsNotification[playerid][before][MinPosY] - TDN_DISTANCE;
+        TextDrawsNotification[playerid][TDN][MaxPosY] = TextDrawsNotification[playerid][TDN - 1][MinPosY] - TDN_DISTANCE;
     }
     return 1;
 
     #endif
 }
 
-stock LinesTDNotification(playerid, TDN)
+stock LinesTDN(playerid, TDN)
 {
     new lines = 1, width, lastspace = -1, len = strlen(TextDrawsNotification[playerid][TDN][Text]);
  
@@ -404,7 +404,7 @@ stock LinesTDNotification(playerid, TDN)
 
 stock TextDrawSetPos(playerid, TDN)
 {
-    if(TextDrawsNotification[playerid][TDN][Use] != 0)
+    if(TextDrawsNotification[playerid][TDN][Use] == 1)
     {
         if(TextDrawsNotification[playerid][TDN][TextDraw] != Text:-1)
         {
