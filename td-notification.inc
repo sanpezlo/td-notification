@@ -237,6 +237,13 @@ stock UpdateTDNotifications(playerid)
                     TextDrawsNotification[playerid][cycle][Text] = TextDrawsNotification[playerid][cycle + 1][Text];
                     TextDrawsNotification[playerid][cycle][TextDraw] = TextDrawsNotification[playerid][cycle + 1][TextDraw];
 
+                    TextDrawsNotification[playerid][cycle + 1][Use] = 0;
+                    TextDrawsNotification[playerid][cycle + 1][Line] = 0;
+                    TextDrawsNotification[playerid][cycle + 1][Text] = "";
+                    TextDrawsNotification[playerid][cycle + 1][TextDraw] = -1;
+                    TextDrawsNotification[playerid][cycle + 1][MinPosY] = 0;
+                    TextDrawsNotification[playerid][cycle + 1][MaxPosY] = 0;
+
                     #if defined TDN_MODE_DOWN
 
                     MinPosYTDNotification(playerid, cycle);
@@ -263,6 +270,13 @@ stock UpdateTDNotifications(playerid)
                     TextDrawsNotification[playerid][cycle - 1][Line] = TextDrawsNotification[playerid][cycle][Line];
                     TextDrawsNotification[playerid][cycle - 1][Text] = TextDrawsNotification[playerid][cycle][Text];
                     TextDrawsNotification[playerid][cycle - 1][TextDraw] = TextDrawsNotification[playerid][cycle][TextDraw];
+
+                    TextDrawsNotification[playerid][cycle][Use] = 0;
+                    TextDrawsNotification[playerid][cycle][Line] = 0;
+                    TextDrawsNotification[playerid][cycle][Text] = "";
+                    TextDrawsNotification[playerid][cycle][TextDraw] = -1;
+                    TextDrawsNotification[playerid][cycle][MinPosY] = 0;
+                    TextDrawsNotification[playerid][cycle][MaxPosY] = 0;
 
                     #if defined TDN_MODE_DOWN
 
