@@ -1,5 +1,5 @@
 /*
-    td-notification - Version 0.9
+    td-notification - Version 1.0
 
     Modes of use:
     MAX_TDN: set how many TextDraw will be shown in TextDraw's Notification

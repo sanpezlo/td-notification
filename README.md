@@ -17,38 +17,55 @@ sampctl package install ThePez/td-notification
 Include in your code and begin using the library:
 
 ```pawn
+#define TDN_MODE_DEFAULT
 #include <td-notification>
 ```
 
 ## Usage
 
-Modes of use
+* `MAX_TDN`: set how many TextDraw will be shown in TextDraw's Notification
+* `TDN_POS_X`: TextDraw notifications will be at the position set on the X axis
+* `TDN_POS_Y`: TextDraw notifications will be at the position set on the Y axis
+* `TDN_FONT`: TextDraw Notification will have the set font
+* `TDN_LETTER_SIZE_X`: TextDraw notifications will have the set font size on the X axis
+* `TDN_LETTER_SIZE_Y`: TextDraw notifications will have the set font size on the Y axis
+* `TDN_SIZE`: TextDraw notifications will have the set width size
+* `TDN_COLOR`: TextDraw notifications will have the set font color
+* `TDN_COLOR_BOX`: TextDraw notifications will have the set box color
+* `TDN_PROPORTIONAL`: TextDraw notifications will have the set proportional
+* `TDN_DISTANCE`: TextDraw notifications will have the set distance
+* `MAX_TDN_TEXT`: TextDraw notifications will have a maximum the set text
+* `TDN_MODE_DOWN`: TextDraw notifications will scroll down
+* `TDN_MODE_UP`: TextDraw notifications will scroll up
+* `TDN_TIME`: TextDraw notifications will hide at the set time
+
+* `TDN_MODE_DEFAULT`: TextDraw notifications will use the default settings
+
+Function
 
 ```pawn
-MAX_TDN: set how many TextDraw will be shown in TextDraw's Notification
-TDN_POS_X: TextDraw notifications will be at the position set on the X axis
-TDN_POS_Y: TextDraw notifications will be at the position set on the Y axis
-TDN_FONT: TextDraw Notification will have the set font
-TDN_LETTER_SIZE_X: TextDraw notifications will have the set font size on the X axis
-TDN_LETTER_SIZE_Y: TextDraw notifications will have the set font size on the Y axis
-TDN_SIZE: TextDraw notifications will have the set width size
-TDN_COLOR: TextDraw notifications will have the set font color
-TDN_COLOR_BOX: TextDraw notifications will have the set box color
-TDN_PROPORTIONAL: TextDraw notifications will have the set proportional
-TDN_DISTANCE: TextDraw notifications will have the set distance
-MAX_TDN_TEXT: TextDraw notifications will have a maximum the set text
-TDN_MODE_DOWN: TextDraw notifications will scroll down
-TDN_MODE_UP: TextDraw notifications will scroll up
-TDN_TIME: TextDraw notifications will hide at the set time
-
-TDN_MODE_DEFAULT: TextDraw notifications will use the default settings
+ShowTDN(playerid, const reason[], hide = -1);
 ```
 
-function
+Shows a textdraw with the set text
+
+*   If you pass the `hide` parameter, the same thing will return (this is the id of the TextDraw)
+
+Normal functioning: the TextDraw will be automatically hidden, with the time set in `TDN_TIME` (no need to use `HideTDN`)
+
+*   Returns 1, if the textdraw is shown, perfectly
+*   Returns 0, if the text drawing could not be displayed (there are as many TextDraws displayed as set in `MAX_TDN`)
 
 ```pawn
-ShowTDNotification(playerid, const reason[]);
+HideTDN(playerid, TDN);
 ```
+
+Hides the textdraw
+
+You must pass the id that returned the function ShowTDN
+
+*   Returns 1, if the textdraw was hidden, perfectly
+*   Returns 0, if the id passed in the function was not found
 
 ## Testing
 
@@ -61,6 +78,6 @@ sampctl package run
 ## Credits
 
 * [ThePez](https://github.com/ThePez) - Creator of the include
+* [NaS](https://github.com/Naseband) - helped me gather information to make the include, also helped me somewhere in the code
 * [Kristo](https://github.com/kristoisberg) - Creator of the [samp-td-string-width](https://github.com/kristoisberg/samp-td-string-width) include, it helped me to calculate the width of the TextDraw
 * [Y_less](https://github.com/y-less) - Creator of the [YSI](https://github.com/pawn-lang/YSI-Includes) include
-* [NaS](https://github.com/Naseband) - fixed the function UpdateTDNotifications and LinesTDNotification
