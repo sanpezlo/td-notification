@@ -239,8 +239,8 @@ stock UpdateTDNotifications(playerid)
 
                     TextDrawsNotification[playerid][cycle + 1][Use] = 0;
                     TextDrawsNotification[playerid][cycle + 1][Line] = 0;
-                    TextDrawsNotification[playerid][cycle + 1][Text] = "";
-                    TextDrawsNotification[playerid][cycle + 1][TextDraw] = -1;
+                    TextDrawsNotification[playerid][cycle + 1][Text][0] = EOS;
+                    TextDrawsNotification[playerid][cycle + 1][TextDraw] = Text:-1;
                     TextDrawsNotification[playerid][cycle + 1][MinPosY] = 0;
                     TextDrawsNotification[playerid][cycle + 1][MaxPosY] = 0;
 
@@ -273,8 +273,8 @@ stock UpdateTDNotifications(playerid)
 
                     TextDrawsNotification[playerid][cycle][Use] = 0;
                     TextDrawsNotification[playerid][cycle][Line] = 0;
-                    TextDrawsNotification[playerid][cycle][Text] = "";
-                    TextDrawsNotification[playerid][cycle][TextDraw] = -1;
+                    TextDrawsNotification[playerid][cycle][Text][0] = EOS;
+                    TextDrawsNotification[playerid][cycle][TextDraw] = Text:-1;
                     TextDrawsNotification[playerid][cycle][MinPosY] = 0;
                     TextDrawsNotification[playerid][cycle][MaxPosY] = 0;
 
