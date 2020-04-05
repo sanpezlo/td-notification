@@ -1,6 +1,7 @@
 #pragma compress 0
 #include <a_samp>
 #include <zcmd>
+#define YSI_NO_HEAP_MALLOC
 #define TDN_MODE_DEFAULT
 #include "td-notification.inc"
 
@@ -32,30 +33,30 @@ CMD:hide(playerid, params[])
 
 CMD:td1(playerid, params[])
 {
-    ShowTDN(playerid, "jksladj askldjaskl jdaslkdj");
+    ShowTDN(playerid, "jksladj askldjaskl jdaslk 1");
     return 1;
 }
 
 CMD:td2(playerid, params[])
 {
-    ShowTDN(playerid, "jksladj askldjaskl jdaslkdj jksladj askldjaskl jdaslkdj");
+    ShowTDN(playerid, "jksladj askldjaskl jdaslkdj jksladj askldjaskl jdasl 2");
     return 1;
 }
 
 CMD:td3(playerid, params[])
 {
-    ShowTDN(playerid, "jksladj askldjaskl jdaslkdj jksladj askldjaskl jdaslkdj jksladj askldjaskl jdaslkdj");
+    ShowTDN(playerid, "jksladj askldjaskl jdaslkdj jksladj askldjaskl jdaslkdj jksladj askldjaskl jdasl 3");
     return 1;
 }
 
 CMD:td4(playerid, params[])
 {
-    ShowTDN(playerid, "jksladj askldjaskl jdaslkdj jksladj askldjaskl jdaslkdj jksladj askldjaskl jdaslkdj jksladj askldjaskl jdaslkdj");
+    ShowTDN(playerid, "jksladj askldjaskl jdaslkdj jksladj askldjaskl jdaslkdj jksladj askldjaskl jdaslkdj jksladj askldjaskl jdasl 4");
     return 1;
 }
 
 CMD:td5(playerid, params[])
 {
-    ShowTDN(playerid, "jksladj askldjaskl jdaslkdj jksladj askldjaskl jdaslkdj jksladj askldjaskl jdaslkdj jksladj askldjaskl jdaslkdj jksladj askldjaskl jdaslkdj");
+    ShowTDN(playerid, "jksladj askldjaskl jdaslkdj jksladj askldjaskl jdaslkdj jksladj askldjaskl jdaslkdj jksladj askldjaskl jdaslkdj jksladj askldjaskl jdasl 5");
     return 1;
 }

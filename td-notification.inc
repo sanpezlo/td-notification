@@ -102,9 +102,7 @@
     #define TDN_TIME 20000
     #define MAX_TDN_TEXT 800
 #endif
- 
-#define YSI_NO_HEAP_MALLOC
- 
+
 #include <YSI_Coding\y_hooks>
 #include <YSI_Coding\y_timers>
 #include <td-string-width>
@@ -195,7 +193,7 @@ stock ShowTDN(playerid, const reason[], hide = -1)
             
             #endif
 
-            TextDrawSetPos(playerid, cycle);
+            CreateTDN(playerid, cycle);
 
             if(hide == -1)
             {
@@ -312,7 +310,7 @@ stock UpdateTDN(playerid)
                 }
             }
         }
-        TextDrawSetPos(playerid, cycle);
+        CreateTDN(playerid, cycle);
     }
     return 1;
 }
@@ -402,7 +400,7 @@ stock LinesTDN(playerid, TDN)
     return 1;
 }
 
-stock TextDrawSetPos(playerid, TDN)
+stock CreateTDN(playerid, TDN)
 {
     if(TextDrawsNotification[playerid][TDN][Use] == 1)
     {
