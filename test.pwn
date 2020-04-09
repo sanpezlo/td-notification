@@ -19,7 +19,7 @@ CMD:td(playerid, params[])
 {
     new string[6],
     id;
-    id = ShowTDN(playerid, params, 1);
+    id = ShowTDN_Manual(playerid, params);
     format(string, sizeof(string), "ID: %i", id);
     SendClientMessage(playerid, -1, string);
     return 1;

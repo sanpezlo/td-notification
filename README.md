@@ -44,17 +44,28 @@ Include in your code and begin using the library:
 Function
 
 ```pawn
-ShowTDN(playerid, const reason[], hide = -1);
+ShowTDN(playerid, const reason[];
 ```
 
 Shows a textdraw with the set text
 
-*   If you pass the `hide` parameter, the same thing will return (this is the id of the TextDraw)
-
 Normal functioning: the TextDraw will be automatically hidden, with the time set in `TDN_TIME` (no need to use `HideTDN`)
 
 *   Returns 1, if the textdraw is shown, perfectly
-*   Returns 0, if the text drawing could not be displayed (there are as many TextDraws displayed as set in `MAX_TDN`)
+*   Returns -1, if the text drawing could not be displayed (there are as many TextDraws displayed as set in `MAX_TDN`)
+
+```pawn
+ShowTDN_Manual(playerid, const reason[];
+```
+
+Shows a textdraw with the set text
+
+Manual functioning: the TextDraw will not automatically hide, you must use `HideTDN`
+
+*   If you pass the `hide` parameter, the same thing will return (this is the id of the TextDraw)
+
+*   Returns 0 - (`MAX_TDN` - 1), if the textdraw is shown, perfectly, will return the id of the TextDraws (the id you will use in `HideTDN`)
+*   Returns -1, if the text drawing could not be displayed (there are as many TextDraws displayed as set in `MAX_TDN`)
 
 ```pawn
 HideTDN(playerid, TDN);
@@ -62,7 +73,7 @@ HideTDN(playerid, TDN);
 
 Hides the textdraw
 
-You must pass the id that returned the function ShowTDN
+You must pass the id that returned the function ShowTDN_Manual
 
 *   Returns 1, if the textdraw was hidden, perfectly
 *   Returns 0, if the id passed in the function was not found

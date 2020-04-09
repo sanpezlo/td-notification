@@ -117,7 +117,8 @@ enum InformationTDN
     Float:MaxPosY,
     Hide
 }
-new TextDrawsNotification[MAX_PLAYERS][MAX_TDN][InformationTDN];
+new TextDrawsNotification[MAX_PLAYERS][MAX_TDN][InformationTDN],
+    counter;
 
 hook OnGameModeInit()
 {
@@ -165,8 +166,46 @@ timer TimerHideTDN[TDN_TIME](playerid)
     }
     return 0;
 }
+
+forward ShowTDN(playerid, const reason[]); 
+public ShowTDN(playerid, const reason[])
+{
+    for(new cycle; cycle < MAX_TDN; cycle++)
+    {
+        if(!TextDrawsNotification[playerid][cycle][Use])
+        {
+            TextDrawsNotification[playerid][cycle][Text][0] = EOS;
+            strcat(TextDrawsNotification[playerid][cycle][Text], reason, MAX_TDN_TEXT);
  
-stock ShowTDN(playerid, const reason[], hide = -1)
+            TextDrawsNotification[playerid][cycle][Use] = 1;
+ 
+            LinesTDN(playerid, cycle);
+
+            #if defined TDN_MODE_DOWN
+
+            MinPosYTDN(playerid, cycle);
+            MaxPosYTDN(playerid, cycle);
+
+            #endif
+
+            #if defined TDN_MODE_UP
+
+            MaxPosYTDN(playerid, cycle);
+            MinPosYTDN(playerid, cycle);
+            
+            #endif
+
+            TextDrawsNotification[playerid][cycle][Hide] = -1;
+
+            CreateTDN(playerid, cycle);
+            return 1;
+        }
+    }
+    return -1;
+}
+
+forward ShowTDN_Manual(playerid, const reason[]); 
+public ShowTDN_Manual(playerid, const reason[])
 {
     for(new cycle; cycle < MAX_TDN; cycle++)
     {
@@ -195,20 +234,16 @@ stock ShowTDN(playerid, const reason[], hide = -1)
 
             CreateTDN(playerid, cycle);
 
-            if(hide == -1)
-            {
-                TextDrawsNotification[playerid][cycle][Hide] = -1;
-                defer TimerHideTDN(playerid);
-            }
-            else
-            {
-                TextDrawsNotification[playerid][cycle][Hide] = hide;
-                return hide;
-            }
-            return 1;
+            new TDN = counter;
+
+            TextDrawsNotification[playerid][cycle][Hide] = TDN;
+
+            if(counter == MAX_TDN - 1) counter = 0;
+            else counter++;
+            return TDN;
         }
     }
-    return 0;
+    return -1;
 }
 
 stock hideTDN(playerid, TDN)
@@ -333,11 +368,7 @@ stock MinPosYTDN(playerid, TDN)
 
     #if defined TDN_MODE_UP
 
-    new Float:up = (TDN_LETTER_SIZE_Y * 2) + 2;
-    new Float:letter = (TDN_LETTER_SIZE_Y * 5.75) * TextDrawsNotification[playerid][TDN][Line];
-    new Float:middle = (TextDrawsNotification[playerid][TDN][Line] - 1) * ((TDN_LETTER_SIZE_Y * 2) + 2 + TDN_LETTER_SIZE_Y - 1);
-    new Float:down = TDN_LETTER_SIZE_Y + 3;
-    TextDrawsNotification[playerid][TDN][MinPosY] = TextDrawsNotification[playerid][TDN][MaxPosY] - up - letter - middle - down;
+    TextDrawsNotification[playerid][TDN][MinPosY] = TextDrawsNotification[playerid][TDN][MaxPosY] - ((TDN_LETTER_SIZE_Y * 2) + 2) - ((TDN_LETTER_SIZE_Y * 5.75) * TextDrawsNotification[playerid][TDN][Line]) - ((TextDrawsNotification[playerid][TDN][Line] - 1) * ((TDN_LETTER_SIZE_Y * 2) + 2 + TDN_LETTER_SIZE_Y - 1)) - (TDN_LETTER_SIZE_Y + 3);
     return 1;
 
     #endif
