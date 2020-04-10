@@ -425,12 +425,7 @@ stock LinesTDN(playerid, TDN)
             }
         }
     }
-
-    new string[3];
-
-    format(string, sizeof(string), "%i", lines);
-    SendClientMessage(playerid, -1, string);
- 
+    
     TextDrawsNotification[playerid][TDN][Line] = lines;
  
     return 1;
