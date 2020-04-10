@@ -62,8 +62,6 @@ Shows a textdraw with the set text
 
 Manual functioning: the TextDraw will not automatically hide, you must use `HideTDN`
 
-*   If you pass the `hide` parameter, the same thing will return (this is the id of the TextDraw)
-
 *   Returns 0 - (`MAX_TDN` - 1), if the textdraw is shown, perfectly, will return the id of the TextDraws (the id you will use in `HideTDN`)
 *   Returns -1, if the text drawing could not be displayed (there are as many TextDraws displayed as set in `MAX_TDN`)
 
