@@ -39,19 +39,19 @@ CMD:td1(playerid, params[])
 
 CMD:td2(playerid, params[])
 {
-    ShowTDN(playerid, "jksladj askldjaskl jdaslkdj jksladj askldjaskl jdasl 2");
+    ShowTDN(playerid, "jksladj askldjaskl jdaslkdj jksladj askldjaskl jdaslk 2");
     return 1;
 }
 
 CMD:td3(playerid, params[])
 {
-    ShowTDN(playerid, "jksladj askldjaskl jdaslkdj jksladj askldjaskl jdaslkdj jksladj askldjaskl jdasl 3");
+    ShowTDN(playerid, "jksladj askldjaskl jdaslkdj jksladj askldjaskl jdaslkdj jksladj askldjaskl jdaslk 3");
     return 1;
 }
 
 CMD:td4(playerid, params[])
 {
-    ShowTDN(playerid, "jksladj askldjaskl jdaslkdj jksladj askldjaskl jdaslkdj jksladj askldjaskl jdaslkdj jksladj askldjaskl jdasl 4");
+    ShowTDN(playerid, "jksladj askldjaskl jdaslkdj jksladj askldjaskl jdaslkdj jksladj askldjaskl jdaslkdj jksladj askldjaskl jdaslk 4");
     return 1;
 }
 

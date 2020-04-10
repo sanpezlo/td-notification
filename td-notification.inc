@@ -368,7 +368,7 @@ stock MinPosYTDN(playerid, TDN)
 
     #if defined TDN_MODE_UP
 
-    TextDrawsNotification[playerid][TDN][MinPosY] = TextDrawsNotification[playerid][TDN][MaxPosY] - ((TDN_LETTER_SIZE_Y * 2) + 2) - ((TDN_LETTER_SIZE_Y * 5.75) * TextDrawsNotification[playerid][TDN][Line]) - ((TextDrawsNotification[playerid][TDN][Line] - 1) * ((TDN_LETTER_SIZE_Y * 2) + 2 + TDN_LETTER_SIZE_Y - 1)) - (TDN_LETTER_SIZE_Y + 3);
+    TextDrawsNotification[playerid][TDN][MinPosY] = TextDrawsNotification[playerid][TDN][MaxPosY] - ((TDN_LETTER_SIZE_Y * 2) + 2) - ((TDN_LETTER_SIZE_Y * 5.75) * TextDrawsNotification[playerid][TDN][Line]) - ((TextDrawsNotification[playerid][TDN][Line] - 1) * ((TDN_LETTER_SIZE_Y * 2) + 2 + TDN_LETTER_SIZE_Y)) - (TDN_LETTER_SIZE_Y + 3);
     return 1;
 
     #endif
@@ -378,7 +378,7 @@ stock MaxPosYTDN(playerid, TDN)
 {
     #if defined TDN_MODE_DOWN
 
-    TextDrawsNotification[playerid][TDN][MaxPosY] = TextDrawsNotification[playerid][TDN][MinPosY] + (TDN_LETTER_SIZE_Y * 2) + 2 + (TDN_LETTER_SIZE_Y * 5.75 * TextDrawsNotification[playerid][TDN][Line]) + ((TextDrawsNotification[playerid][TDN][Line] - 1) * ((TDN_LETTER_SIZE_Y * 2) + 2 + TDN_LETTER_SIZE_Y - 1)) + TDN_LETTER_SIZE_Y + 3;
+    TextDrawsNotification[playerid][TDN][MaxPosY] = TextDrawsNotification[playerid][TDN][MinPosY] + (TDN_LETTER_SIZE_Y * 2) + 2 + (TDN_LETTER_SIZE_Y * 5.75 * TextDrawsNotification[playerid][TDN][Line]) + ((TextDrawsNotification[playerid][TDN][Line] - 1) * ((TDN_LETTER_SIZE_Y * 2) + 2 + TDN_LETTER_SIZE_Y)) + TDN_LETTER_SIZE_Y + 3;
     return 1;
 
     #endif
@@ -400,13 +400,13 @@ stock MaxPosYTDN(playerid, TDN)
 
 stock LinesTDN(playerid, TDN)
 {
-    new lines = 1, width, lastspace = -1, len = strlen(TextDrawsNotification[playerid][TDN][Text]);
+    new lines = 1, Float:width, lastspace = -1, len = strlen(TextDrawsNotification[playerid][TDN][Text]);
  
     for(new i = 0; i < len; i ++)
     {
         if(TextDrawsNotification[playerid][TDN][Text][i] == ' ') lastspace = i;
  
-        width += floatround(TDN_LETTER_SIZE_X * GetTextDrawCharacterWidth(TextDrawsNotification[playerid][TDN][Text][i], TDN_FONT, bool:TDN_PROPORTIONAL), floatround_ceil);
+        width += TDN_LETTER_SIZE_X * GetTextDrawCharacterWidth(TextDrawsNotification[playerid][TDN][Text][i], TDN_FONT, bool:TDN_PROPORTIONAL);
  
         if(width > TDN_SIZE - 1)
         {
@@ -425,6 +425,11 @@ stock LinesTDN(playerid, TDN)
             }
         }
     }
+
+    new string[3];
+
+    format(string, sizeof(string), "%i", lines);
+    SendClientMessage(playerid, -1, string);
  
     TextDrawsNotification[playerid][TDN][Line] = lines;
  
