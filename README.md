@@ -71,7 +71,7 @@ HideTDN(playerid, TDN);
 
 Hides the textdraw
 
-You must pass the id that returned the function ShowTDN_Manual
+You must pass the id that returned the function `ShowTDN_Manual`
 
 *   Returns 1, if the textdraw was hidden, perfectly
 *   Returns 0, if the id passed in the function was not found
