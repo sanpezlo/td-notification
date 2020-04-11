@@ -439,28 +439,52 @@ stock MaxPosYTDN(playerid, TDN)
 
 stock LinesTDN(playerid, TDN)
 {
-    new lines = 1, Float:width, lastspace = -1, len = strlen(TextDrawsNotification[playerid][TDN][Text]);
+    new lines = 1, Float:width, lastspace = -1, supr, len = strlen(TextDrawsNotification[playerid][TDN][Text]);
  
     for(new i = 0; i < len; i ++)
     {
-        if(TextDrawsNotification[playerid][TDN][Text][i] == ' ') lastspace = i;
- 
-        width += TDN_LETTER_SIZE_X * GetTextDrawCharacterWidth(TextDrawsNotification[playerid][TDN][Text][i], TDN_FONT, bool:TDN_PROPORTIONAL);
- 
-        if(width > TDN_SIZE - 1)
+        if(TextDrawsNotification[playerid][TDN][Text][i] == '~')
         {
-            if(lastspace != i && lastspace != -1)
+            if(supr == 0)
             {
-                lines ++;
-                i = lastspace;
-                lastspace = -1;
-                width = 0;
+                supr = 1;
+                if(TextDrawsNotification[playerid][TDN][Text][i+2] != '~') SendClientMessage(playerid, -1, "Error: '~' used incorrectly'");
+            }
+            else if(supr == 1) supr = 0;
+        }
+        else
+        {
+            if(supr == 1)
+            {
+                if(TextDrawsNotification[playerid][TDN][Text][i] == 'n')
+                {
+                    lines ++;
+                    lastspace = -1;
+                    width = 0;
+                }
             }
             else
             {
-                lines ++;
-                lastspace = -1;
-                width = 0;
+                if(TextDrawsNotification[playerid][TDN][Text][i] == ' ') lastspace = i;
+ 
+                width += TDN_LETTER_SIZE_X * GetTextDrawCharacterWidth(TextDrawsNotification[playerid][TDN][Text][i], TDN_FONT, bool:TDN_PROPORTIONAL);
+
+                if(width > TDN_SIZE - 3)
+                {
+                    if(lastspace != i && lastspace != -1)
+                    {
+                        lines ++;
+                        i = lastspace;
+                        lastspace = -1;
+                        width = 0;
+                    }
+                    else
+                    {
+                        lines ++;
+                        lastspace = -1;
+                        width = 0;
+                    }
+                }
             }
         }
     }

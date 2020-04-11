@@ -44,7 +44,7 @@ Include in your code and begin using the library:
 Function
 
 ```pawn
-ShowTDN(playerid, const reason[];
+ShowTDN(playerid, const reason[]);
 ```
 
 Shows a textdraw with the set text
@@ -55,7 +55,7 @@ Normal functioning: the TextDraw will be automatically hidden, with the time set
 *   Returns -1, if the text drawing could not be displayed (there are as many TextDraws displayed as set in `MAX_TDN`)
 
 ```pawn
-ShowTDN_Manual(playerid, const reason[];
+ShowTDN_Manual(playerid, const reason[]);
 ```
 
 Shows a textdraw with the set text
