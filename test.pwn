@@ -8,6 +8,11 @@
 main() {
 }
 
+public OnPlayerDisconnect(playerid, reason)
+{
+    return 1;
+}
+
 CMD:spawn(playerid, params[])
 {
     SetSpawnInfo(playerid, 0, 46, 1484.1082, -1668.4976, 14.9159, 0, 0,0,0,0,0,0);
@@ -25,9 +30,27 @@ CMD:td(playerid, params[])
     return 1;
 }
 
-CMD:hide(playerid, params[])
+CMD:hide0(playerid, params[])
+{
+    hideTDN(playerid, 0);
+    return 1;
+}
+
+CMD:hide1(playerid, params[])
 {
     hideTDN(playerid, 1);
+    return 1;
+}
+
+CMD:hide2(playerid, params[])
+{
+    hideTDN(playerid, 2);
+    return 1;
+}
+
+CMD:hide3(playerid, params[])
+{
+    hideTDN(playerid, 3);
     return 1;
 }
 
