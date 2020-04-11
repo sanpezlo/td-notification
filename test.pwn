@@ -54,6 +54,12 @@ CMD:hide3(playerid, params[])
     return 1;
 }
 
+CMD:hide4(playerid, params[])
+{
+    hideTDN(playerid, 4);
+    return 1;
+}
+
 CMD:td1(playerid, params[])
 {
     ShowTDN(playerid, "jksladj askldjaskl jdaslk 1");

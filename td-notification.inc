@@ -127,6 +127,7 @@ hook OnGameModeInit()
         for(new TDN = 0; TDN < MAX_TDN; TDN++)
         {
             TextDrawsNotification[playerid][TDN][TextDraw] = PlayerText:-1;
+            TextDrawsNotification[playerid][TDN][Hide] = -1;
         }
     }
     return Y_HOOKS_CONTINUE_RETURN_1;
@@ -139,6 +140,7 @@ hook OnFilterScriptInit()
         for(new TDN = 0; TDN < MAX_TDN; TDN++)
         {
             TextDrawsNotification[playerid][TDN][TextDraw] = PlayerText:-1;
+            TextDrawsNotification[playerid][TDN][Hide] = -1;
         }
     }
     return Y_HOOKS_CONTINUE_RETURN_1;
@@ -218,9 +220,6 @@ public ShowTDN(playerid, const reason[])
 
             defer TimerHideTDN(playerid);
 
-            if(counter[playerid] == MAX_TDN - 1) counter[playerid] = 0;
-            else counter[playerid]++;
-
             return 1;
         }
     }
@@ -257,6 +256,12 @@ public ShowTDN_Manual(playerid, const reason[])
 
             CreateTDN(playerid, cycle);
 
+            while(used(playerid, counter[playerid]))
+            {
+                if(counter[playerid] == MAX_TDN - 1) counter[playerid] = 0;
+                else counter[playerid]++;
+            }
+
             new TDN = counter[playerid];
 
             TextDrawsNotification[playerid][cycle][Hide] = TDN;
@@ -268,6 +273,15 @@ public ShowTDN_Manual(playerid, const reason[])
         }
     }
     return -1;
+}
+
+stock used(playerid, id)
+{
+    for(new cycle; cycle < MAX_TDN; cycle++)
+    {
+        if(TextDrawsNotification[playerid][cycle][Hide] == id) return 1;
+    }
+    return 0;
 }
 
 stock hideTDN(playerid, TDN)
