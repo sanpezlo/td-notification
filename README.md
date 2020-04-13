@@ -89,4 +89,3 @@ sampctl package run
 * [ThePez](https://github.com/ThePez) - Creator of the include
 * [NaS](https://github.com/Naseband) - helped me gather information to make the include, also helped me somewhere in the code
 * [Kristo](https://github.com/kristoisberg) - Creator of the [samp-td-string-width](https://github.com/kristoisberg/samp-td-string-width) include, it helped me to calculate the width of the TextDraw
-* [Y_less](https://github.com/y-less) - Creator of the [YSI](https://github.com/pawn-lang/YSI-Includes) include
