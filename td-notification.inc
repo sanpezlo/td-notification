@@ -104,8 +104,6 @@
 #endif
 
 #include <td-string-width>
-#include <YSI_Coding\y_timers>
-#include <YSI_Coding\y_hooks>
  
 enum InformationTDN
 {
@@ -120,48 +118,8 @@ enum InformationTDN
 new TextDrawsNotification[MAX_PLAYERS][MAX_TDN][InformationTDN],
     counter[MAX_PLAYERS];
 
-hook OnGameModeInit()
-{
-    for(new playerid = 0; playerid < MAX_PLAYERS; playerid++)
-    {
-        for(new TDN = 0; TDN < MAX_TDN; TDN++)
-        {
-            TextDrawsNotification[playerid][TDN][TextDraw] = PlayerText:-1;
-            TextDrawsNotification[playerid][TDN][Hide] = -1;
-        }
-    }
-    return Y_HOOKS_CONTINUE_RETURN_1;
-}
- 
-hook OnFilterScriptInit()
-{
-    for(new playerid = 0; playerid < MAX_PLAYERS; playerid++)
-    {
-        for(new TDN = 0; TDN < MAX_TDN; TDN++)
-        {
-            TextDrawsNotification[playerid][TDN][TextDraw] = PlayerText:-1;
-            TextDrawsNotification[playerid][TDN][Hide] = -1;
-        }
-    }
-    return Y_HOOKS_CONTINUE_RETURN_1;
-}
-
-hook OnPlayerDisconnect(playerid, reason)
-{
-    for(new cycle; cycle < MAX_TDN; cycle++)
-    {
-        TextDrawsNotification[playerid][cycle][Use] = 0;
-        TextDrawsNotification[playerid][cycle][Line] = 0;
-        TextDrawsNotification[playerid][cycle][Text][0] = EOS;
-        TextDrawsNotification[playerid][cycle][MinPosY] = 0;
-        TextDrawsNotification[playerid][cycle][MaxPosY] = 0;
-        TextDrawsNotification[playerid][cycle][Hide] = -1;
-        TextDrawsNotification[playerid][cycle][TextDraw] = PlayerText:-1;
-    }
-    return Y_HOOKS_CONTINUE_RETURN_1;
-}
- 
-timer TimerHideTDN[TDN_TIME](playerid)
+forward TimerHideTDN(playerid);
+public TimerHideTDN(playerid)
 {
     for(new cycle; cycle < MAX_TDN; cycle++)
     {
@@ -218,7 +176,7 @@ public ShowTDN(playerid, const reason[])
 
             CreateTDN(playerid, cycle);
 
-            defer TimerHideTDN(playerid);
+            SetTimerEx("TimerHideTDN", TDN_TIME, false, "i", playerid);
 
             return 1;
         }
@@ -520,3 +478,87 @@ stock CreateTDN(playerid, TDN)
     }
     return 1;
 }
+
+public OnGameModeInit()
+{
+    for(new playerid = 0; playerid < MAX_PLAYERS; playerid++)
+    {
+        for(new TDN = 0; TDN < MAX_TDN; TDN++)
+        {
+            TextDrawsNotification[playerid][TDN][TextDraw] = PlayerText:-1;
+            TextDrawsNotification[playerid][TDN][Hide] = -1;
+        }
+    }
+    #if defined TDN_OnGameModeInit
+		return TDN_OnGameModeInit();
+	#else
+		return 1;
+	#endif
+}
+#if defined _ALS_OnGameModeInit
+	#undef OnGameModeInit
+#else
+	#define _ALS_OnGameModeInit
+#endif
+
+#define OnGameModeInit TDN_OnGameModeInit
+#if defined TDN_OnGameModeInit
+	forward TDN_OnGameModeInit();
+#endif
+
+ 
+public OnFilterScriptInit()
+{
+    for(new playerid = 0; playerid < MAX_PLAYERS; playerid++)
+    {
+        for(new TDN = 0; TDN < MAX_TDN; TDN++)
+        {
+            TextDrawsNotification[playerid][TDN][TextDraw] = PlayerText:-1;
+            TextDrawsNotification[playerid][TDN][Hide] = -1;
+        }
+    }
+    #if defined TDN_OnFilterScriptInit
+		return TDN_OnFilterScriptInit();
+	#else
+		return 1;
+	#endif
+}
+#if defined _ALS_OnFilterScriptInit
+	#undef OnFilterScriptInit
+#else
+	#define _ALS_OnFilterScriptInit
+#endif
+
+#define OnFilterScriptInit TDN_OnFilterScriptInit
+#if defined TDN_OnFilterScriptInit
+	forward TDN_OnFilterScriptInit();
+#endif
+
+public OnPlayerDisconnect(playerid, reason)
+{
+    for(new cycle; cycle < MAX_TDN; cycle++)
+    {
+        TextDrawsNotification[playerid][cycle][Use] = 0;
+        TextDrawsNotification[playerid][cycle][Line] = 0;
+        TextDrawsNotification[playerid][cycle][Text][0] = EOS;
+        TextDrawsNotification[playerid][cycle][MinPosY] = 0;
+        TextDrawsNotification[playerid][cycle][MaxPosY] = 0;
+        TextDrawsNotification[playerid][cycle][Hide] = -1;
+        TextDrawsNotification[playerid][cycle][TextDraw] = PlayerText:-1;
+    }
+    #if defined TDN_OnPlayerDisconnect
+		return TDN_OnPlayerDisconnect(playerid, reason);
+	#else
+		return 1;
+	#endif
+}
+#if defined _ALS_OnPlayerDisconnect
+	#undef OnPlayerDisconnect
+#else
+	#define _ALS_OnPlayerDisconnect
+#endif
+
+#define OnPlayerDisconnect TDN_OnPlayerDisconnect
+#if defined TDN_OnPlayerDisconnect
+	forward TDN_OnPlayerDisconnect(playerid, reason);
+#endif
