@@ -152,6 +152,63 @@ public ShowTDN(playerid, const reason[])
         if(!TextDrawsNotification[playerid][cycle][Use])
         {
             TextDrawsNotification[playerid][cycle][Text][0] = EOS;
+
+            new text[MAX_TDN_TEXT];
+
+            for(new len = strlen(reason), pos; pos < len; pos ++)
+            {
+                switch(reason[pos])
+                {
+                    case 'à': text[pos] = 151;
+                    case 'á': text[pos] = 152;
+                    case 'â': text[pos] = 153;
+                    case 'ä': text[pos] = 154;
+                    case 'À': text[pos] = 128;
+                    case 'Á': text[pos] = 129;
+                    case 'Â': text[pos] = 130;
+                    case 'Ä': text[pos] = 131;
+                    case 'è': text[pos] = 157;
+                    case 'é': text[pos] = 158;
+                    case 'ê': text[pos] = 159;
+                    case 'ë': text[pos] = 160;
+                    case 'È': text[pos] = 134;
+                    case 'É': text[pos] = 135;
+                    case 'Ê': text[pos] = 136;
+                    case 'Ë': text[pos] = 137;
+                    case 'ì': text[pos] = 161;
+                    case 'í': text[pos] = 162;
+                    case 'î': text[pos] = 163;
+                    case 'ï': text[pos] = 164;
+                    case 'Ì': text[pos] = 138;
+                    case 'Í': text[pos] = 139;
+                    case 'Î': text[pos] = 140;
+                    case 'Ï': text[pos] = 141;
+                    case 'ò': text[pos] = 165;
+                    case 'ó': text[pos] = 166;
+                    case 'ô': text[pos] = 167;
+                    case 'ö': text[pos] = 168;
+                    case 'Ò': text[pos] = 142;
+                    case 'Ó': text[pos] = 143;
+                    case 'Ô': text[pos] = 144;
+                    case 'Ö': text[pos] = 145;
+                    case 'ù': text[pos] = 169;
+                    case 'ú': text[pos] = 170;
+                    case 'û': text[pos] = 171;
+                    case 'ü': text[pos] = 172;
+                    case 'Ù': text[pos] = 146;
+                    case 'Ú': text[pos] = 147;
+                    case 'Û': text[pos] = 148;
+                    case 'Ü': text[pos] = 149;
+                    case 'ñ': text[pos] = 174;
+                    case 'Ñ': text[pos] = 173;
+                    case '¡': text[pos] = 64;
+                    case '¿': text[pos] = 175;
+                    case '`': text[pos] = 177;
+                    case '&': text[pos] = 38;
+                    default:  text[pos] = reason[pos];
+                }
+            }
+            
             strcat(TextDrawsNotification[playerid][cycle][Text], reason, MAX_TDN_TEXT);
  
             TextDrawsNotification[playerid][cycle][Use] = 1;
@@ -192,7 +249,64 @@ public ShowTDN_Manual(playerid, const reason[])
         if(!TextDrawsNotification[playerid][cycle][Use])
         {
             TextDrawsNotification[playerid][cycle][Text][0] = EOS;
-            strcat(TextDrawsNotification[playerid][cycle][Text], reason, MAX_TDN_TEXT);
+
+            new text[MAX_TDN_TEXT];
+
+            for(new len = strlen(reason), pos; pos < len; pos ++)
+            {
+                switch(reason[pos])
+                {
+                    case 'à': text[pos] = 151;
+                    case 'á': text[pos] = 152;
+                    case 'â': text[pos] = 153;
+                    case 'ä': text[pos] = 154;
+                    case 'À': text[pos] = 128;
+                    case 'Á': text[pos] = 129;
+                    case 'Â': text[pos] = 130;
+                    case 'Ä': text[pos] = 131;
+                    case 'è': text[pos] = 157;
+                    case 'é': text[pos] = 158;
+                    case 'ê': text[pos] = 159;
+                    case 'ë': text[pos] = 160;
+                    case 'È': text[pos] = 134;
+                    case 'É': text[pos] = 135;
+                    case 'Ê': text[pos] = 136;
+                    case 'Ë': text[pos] = 137;
+                    case 'ì': text[pos] = 161;
+                    case 'í': text[pos] = 162;
+                    case 'î': text[pos] = 163;
+                    case 'ï': text[pos] = 164;
+                    case 'Ì': text[pos] = 138;
+                    case 'Í': text[pos] = 139;
+                    case 'Î': text[pos] = 140;
+                    case 'Ï': text[pos] = 141;
+                    case 'ò': text[pos] = 165;
+                    case 'ó': text[pos] = 166;
+                    case 'ô': text[pos] = 167;
+                    case 'ö': text[pos] = 168;
+                    case 'Ò': text[pos] = 142;
+                    case 'Ó': text[pos] = 143;
+                    case 'Ô': text[pos] = 144;
+                    case 'Ö': text[pos] = 145;
+                    case 'ù': text[pos] = 169;
+                    case 'ú': text[pos] = 170;
+                    case 'û': text[pos] = 171;
+                    case 'ü': text[pos] = 172;
+                    case 'Ù': text[pos] = 146;
+                    case 'Ú': text[pos] = 147;
+                    case 'Û': text[pos] = 148;
+                    case 'Ü': text[pos] = 149;
+                    case 'ñ': text[pos] = 174;
+                    case 'Ñ': text[pos] = 173;
+                    case '¡': text[pos] = 64;
+                    case '¿': text[pos] = 175;
+                    case '`': text[pos] = 177;
+                    case '&': text[pos] = 38;
+                    default:  text[pos] = reason[pos];
+                }
+            }
+
+            strcat(TextDrawsNotification[playerid][cycle][Text], text, MAX_TDN_TEXT);
  
             TextDrawsNotification[playerid][cycle][Use] = 1;
  
