@@ -209,7 +209,7 @@ public ShowTDN(playerid, const reason[])
                 }
             }
             
-            strcat(TextDrawsNotification[playerid][cycle][Text], reason, MAX_TDN_TEXT);
+            strcat(TextDrawsNotification[playerid][cycle][Text], text, MAX_TDN_TEXT);
  
             TextDrawsNotification[playerid][cycle][Use] = 1;
  
