@@ -356,7 +356,8 @@ stock used(playerid, id)
     return 0;
 }
 
-stock hideTDN(playerid, TDN)
+forward hideTDN(playerid, TDN);
+public hideTDN(playerid, TDN)
 {
     for(new cycle; cycle < MAX_TDN; cycle++)
     {
