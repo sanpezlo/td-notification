@@ -328,10 +328,14 @@ public ShowTDN_Manual(playerid, const reason[])
 
             CreateTDN(playerid, cycle);
 
-            while(used(playerid, counter[playerid]))
+            for(new i; i < MAX_TDN; i++)
             {
-                if(counter[playerid] == MAX_TDN - 1) counter[playerid] = 0;
-                else counter[playerid]++;
+                if(used(playerid, counter[playerid]))
+                {
+                    if(counter[playerid] == MAX_TDN - 1) counter[playerid] = 0;
+                    else counter[playerid]++;
+                }
+                else break;
             }
 
             new TDN = counter[playerid];
